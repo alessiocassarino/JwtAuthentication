@@ -5,6 +5,7 @@ package com.example.jwtAuthentication.service;
 import com.example.jwtAuthentication.entity.UserInfo;
 import com.example.jwtAuthentication.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
