@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,17 +28,19 @@ public class UserInfoService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<UserInfo> userDetail = repository.findByName(username);
+        Optional<UserInfo> userDetail = repository.findByEmail(username);
 
         // Converting userDetail to UserDetails
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    public String addUser(UserInfo userInfo) {
+    public Map<String, String> addUser(UserInfo userInfo) {
+        Map<String, String> response = new HashMap<>();
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
-        return "User Added Successfully";
+        response.put("message",  "User Added Successfully");
+        return response;
     }
 
 

@@ -10,11 +10,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
@@ -33,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody UserInfo userInfo) {
+    public Map<String, String> addNewUser(@RequestBody UserInfo userInfo) {
         return service.addUser(userInfo);
     }
 
@@ -50,10 +54,12 @@ public class UserController {
     }
 
     @PostMapping("/generateToken")
-    public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+    public Map<String, String> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(),
                         authRequest.getPassword()));
+
+
 
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(authRequest.getUsername());
